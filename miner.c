@@ -68,6 +68,10 @@
 #include "ft232r.h"
 #endif
 
+#ifdef USE_SOUND
+#include "playSound.c"
+#endif
+
 #if defined(unix)
 	#include <errno.h>
 	#include <fcntl.h>
@@ -2822,6 +2826,9 @@ share_result(json_t *val, json_t *res, json_t *err, const struct work *work,
 		applog(LOG_DEBUG, "PROOF OF WORK RESULT: true (yay!!!)");
 		if (!QUIET) {
 			share_result_msg(work, "Accepted", "", resubmit, worktime);
+#ifdef USE_SOUND	//TODO: work this into config
+			if (json_is_true(res) playSound("./media/ding.wav");
+#endif
 		}
 		sharelog("accept", work);
 		if (opt_shares && total_accepted >= opt_shares) {
