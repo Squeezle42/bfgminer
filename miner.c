@@ -68,6 +68,10 @@
 #include "ft232r.h"
 #endif
 
+#ifdef USE_SOUND
+#include "playSound.c"
+#endif
+
 #if defined(unix)
 	#include <errno.h>
 	#include <fcntl.h>
@@ -77,7 +81,6 @@
 #ifdef USE_SCRYPT
 #include "scrypt.h"
 #endif
-
 #if defined(USE_AVALON) || defined(USE_BITFORCE) || defined(USE_ICARUS) || defined(USE_MODMINER) || defined(USE_X6500) || defined(USE_ZTEX)
 #	define USE_FPGA
 #	define USE_FPGA_SERIAL
@@ -2822,6 +2825,7 @@ share_result(json_t *val, json_t *res, json_t *err, const struct work *work,
 		applog(LOG_DEBUG, "PROOF OF WORK RESULT: true (yay!!!)");
 		if (!QUIET) {
 			share_result_msg(work, "Accepted", "", resubmit, worktime);
+                         if (json_is_true(res)) playSound("/usr/share/sounds/ding.wav");
 		}
 		sharelog("accept", work);
 		if (opt_shares && total_accepted >= opt_shares) {
